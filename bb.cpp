@@ -17,9 +17,9 @@ int main() {
         cin >> second_arr[j];
     }
 
-     for (int i = 0; i < k; i++) {
+    for (int i = 0; i < k; i++) {
         int L = 0;
-        int R = n;
+        int R = n - 1;
         int cur_second = second_arr[i];
         while (R - L > 1) {
             int m = (L + R) / 2;
