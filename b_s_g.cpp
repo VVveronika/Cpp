@@ -1,18 +1,16 @@
 #include <iostream>
-#include <vector>
 #include <string>
 
 using namespace std;
 
 class Queue {
-private:
-
+ private:
     string protocol = "";
     struct Node {
         int value;
         Node* next_element_ptr = nullptr;
     };
-    
+
     Node* last_element_ptr = nullptr;
     Node* first_element_ptr = nullptr;
 
@@ -23,9 +21,10 @@ private:
         Node* deleted_element = first_element_ptr;
         first_element_ptr = first_element_ptr->next_element_ptr;
         delete deleted_element;
+
         if (length == 0) {
             last_element_ptr = nullptr;
-            first_element_ptr = nullptr;  
+            first_element_ptr = nullptr;
         }
     }
 
@@ -35,9 +34,7 @@ private:
         }
     }
 
-
-public:
-
+ public:
     void push(int value) {
         length++;
         Node* n = new Node;
@@ -78,19 +75,10 @@ public:
         clear_all();
         cout << protocol;
     }
-
 };
 
 int main() {
     Queue q;
-    // q.push(50);
-    // q.push(10);
-    // q.size();
-    // q.front();
-    // q.pop();
-    // q.clear();
-    // q.size();
-    // q.exit();
     string command = "";
 
     while (command != "exit") {
