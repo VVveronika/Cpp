@@ -34,6 +34,14 @@ class Queue {
         }
     }
 
+    void out(string string_to_out) {
+        protocol += string_to_out + "\n";
+    }
+
+    void out(int int_to_out) {
+        out(to_string(int_to_out));
+    }
+
  public:
     void push(int value) {
         length++;
@@ -49,11 +57,11 @@ class Queue {
         }
 
         last_element_ptr = n;
-        protocol = protocol + "ok" + '\n';
+        out("ok");
     }
 
     void front() {
-        protocol = protocol + to_string(first_element_ptr->value) + '\n';
+        out(first_element_ptr->value);
     }
 
     void pop() {
@@ -62,16 +70,16 @@ class Queue {
     }
 
     void size() {
-        protocol = protocol + to_string(length) + '\n';
+        out(length);
     }
 
     void clear() {
         clear_all();
-        protocol = protocol + "ok" + '\n';
+        out("ok");
     }
 
     void exit() {
-        protocol = protocol + "bye" + '\n';
+        out("bye");
         clear_all();
         cout << protocol;
     }
