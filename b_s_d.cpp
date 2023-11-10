@@ -4,6 +4,7 @@
 using namespace std;
 
 vector<int> minimums(vector<int>* hight, bool left) {
+    // Находит левые или правые минимумы в зависимости от значения переменной left
     int hight_size = hight->size();
     int i = hight_size - 1;
     int delta = -1;
@@ -35,6 +36,7 @@ vector<int> minimums(vector<int>* hight, bool left) {
 }
 
 int maximal_square(vector<int>* hight) {
+    // Находит максимальную площадь прямоугольника для заданных в hight высот
     vector<int> left_min = minimums(hight, true);
     vector<int> right_min = minimums(hight, false);
 
@@ -49,17 +51,20 @@ int maximal_square(vector<int>* hight) {
 }
 
 int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
     int n, m;
     cin >> n >> m;
 
     vector<int> hight(m);
     int max_answer = 0;
     int color;
-    
+
     for (int j = 0; j < n; j++) {
         for (int i = 0; i < m; i++) {
             cin >> color;
-
             if (color == 0) {
                 hight[i]++;
             } else {
