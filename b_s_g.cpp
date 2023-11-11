@@ -5,7 +5,6 @@ using namespace std;
 
 class Queue {
  private:
-    string protocol = "";
     struct Node {
         int value;
         Node* next_element_ptr = nullptr;
@@ -34,14 +33,6 @@ class Queue {
         }
     }
 
-    void out(string string_to_out) {
-        protocol += string_to_out + "\n";
-    }
-
-    void out(int int_to_out) {
-        out(to_string(int_to_out));
-    }
-
  public:
     void push(int value) {
         length++;
@@ -57,31 +48,28 @@ class Queue {
         }
 
         last_element_ptr = n;
-        out("ok");
     }
 
-    void front() {
-        out(first_element_ptr->value);
+    int front() {
+        return first_element_ptr->value;
     }
 
-    void pop() {
-        front();
+    int pop() {
+        int tmp_value = front();
         delete_first_element();
+        return tmp_value;
     }
 
-    void size() {
-        out(length);
+    int size() {
+        return length;
     }
 
     void clear() {
         clear_all();
-        out("ok");
     }
 
     void exit() {
-        out("bye");
         clear_all();
-        cout << protocol;
     }
 };
 
@@ -92,19 +80,22 @@ int main() {
     while (command != "exit") {
         cin >> command;
         if (command == "pop") {
-            q.pop();
+            cout << q.pop() << endl;
         } else if (command == "front") {
-            q.front();
+            cout << q.front() << endl;
         } else if (command == "size") {
-            q.size();
+            cout << q.size() << endl;
         } else if (command == "clear") {
             q.clear();
+            cout << "ok" << endl;
         } else if (command == "exit") {
             q.exit();
+            cout << "bye" << endl;
         } else if (command == "push") {
             int value;
             cin >> value;
             q.push(value);
+            cout << "ok" << endl;
         }
     }
 
