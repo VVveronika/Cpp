@@ -7,17 +7,23 @@ using namespace std;
 class Sets {
  private:
         map<int, multiset<long long>> sets;
+        map<long long, multiset<int>> sets_1;
 
  public:
         void add(int s, long long e) {
             sets[s].insert(e);
+            sets_1[e].insert(s);
         }
 
         void del(int s, long long e) {
             sets[s].erase(sets[s].find(e));
+            sets_1[e].erase(sets_1[e].find(s));
         }
 
         void clear(int s) {
+            for (long long i : sets[s]) {
+                sets_1[i].erase(sets_1[i].find(s));
+            }
             sets[s].clear();
         }
 
@@ -33,15 +39,12 @@ class Sets {
         }
 
         void listsetsof(long long e) {
-            bool element_finded = false;
-            for (auto i : sets) {
-                if (i.second.find(e) != i.second.end()) {
-                    element_finded = true;
-                    cout << i.first << " ";
-                }
-            }
-            if (!element_finded) {
+            if (sets_1[e].empty()) {
                 cout << -1;
+            } else {
+                for (long long i : sets_1[e]) {
+                    cout << i << " ";
+                }
             }
             cout << endl;
         }
@@ -89,6 +92,6 @@ LISTSET 1
 LISTSETSOF 1
 DELETE 1 9
 LISTSET 2
-CLEAR 2
+CLEAR 1
 LISTSET 1
 */
