@@ -63,10 +63,10 @@ int main() {
         cin >> command;
 
         if (command == "ADD") {
-            cin >> s >> e;
+            cin >> e >> s;
             sets.add(s, e);
         } else if (command == "DELETE") {
-            cin >> s >> e;
+            cin >> e >> s;
             sets.del(s, e);
         } else if (command == "CLEAR") {
             cin >> s;
