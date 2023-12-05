@@ -11,15 +11,23 @@ int main() {
     cin >> x >> y;
     y -= 1;
 
-    vector<vector<int>> dp(size, vector<int> (size + 2));
-    dp[y][x] = 1;
+    vector<int> dp(size + 2);
+    dp[x] = 1;
 
-    int summa;
-    for (int i = y + 1; i < size; i++) {
+    int multiplier = 0;
+    int multiplier_1 = x % 2;
+    int summa = 1;
+
+    for (int k = y + 1; k < size; k++) {
+        multiplier_1 = 1 - multiplier_1;
         summa = 0;
-        for (int j = 1; j <= size; j++) {
-            dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j + 1];
-            summa += dp[i][j];            
+        for (int r = 0; r <= 1; r++) {
+            int i = multiplier_1 == 1 ? r : 1 - r;
+            multiplier = 1 - multiplier;
+            for (int j = i + 1; j <= size; j += 2) {
+                dp[j] = (dp[j - 1] + dp[j + 1]) * multiplier;
+                summa += dp[j];
+            }
         }
     }
 
