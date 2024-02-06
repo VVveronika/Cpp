@@ -3,6 +3,7 @@
 #include <queue>
 #include <climits>
 #include <cstdio>
+#include <stack>
 
 using namespace std;
 
@@ -77,19 +78,20 @@ int main() {
         }
 
         int parent = graph[end_vertex].parent;
-        vector<int> result;
-        result.push_back(end_vertex);
-        result.push_back(parent);
+        stack<int> result;
+        result.push(end_vertex);
+        result.push(parent);
         while (parent != start_vertex) {
             parent = graph[parent].parent;
-            result.push_back(parent);
+            result.push(parent);
         }
         int size = result.size();
 
         cout << answer << "\n";
         cout << result.size() << "\n";
-        for (int i = size - 1; i >= 0; i--) {
-            cout << result[i] << " ";
+        for (int i = 0; i < size; i++) {
+            cout << result.top() << " ";
+            result.pop();
         }
         fclose(stdout);
     }
