@@ -29,6 +29,10 @@ void dijkstra(int start_vertex, vector<Vertex>& graph) {
         auto [distance, current_vertex] = q.top();
         q.pop();
 
+        if (graph[current_vertex].best_distance < distance) {
+            continue;
+        }
+
         for (auto [to, weight] : graph[current_vertex].ways) {
             int new_distance = graph[current_vertex].best_distance + weight;
             int old_distance = graph[to].best_distance;
