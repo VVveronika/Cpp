@@ -32,14 +32,16 @@ int main() {
     q.push(start_apple);
 
     while (!q.empty()) {
-        int apple_index = q.back();
+        int apple_index = q.front();
         Apple apple = apples[apple_index];
         q.pop();
 
         for (int i = start_apple + 1; i <= n; i++) {
             Apple& neibour_apple = apples[i];
-            int distance = pow((apple.x - neibour_apple.x), 2) + pow((apple.y - neibour_apple.y), 2);
-            if (!neibour_apple.is_flying && apple.z >= neibour_apple.z && pow(apple.r + neibour_apple.r, 2) >= distance) {
+            int distance = (apple.x - neibour_apple.x) * (apple.x - neibour_apple.x)\
+              + (apple.y - neibour_apple.y) * (apple.y - neibour_apple.y);
+            if (!neibour_apple.is_flying && apple.z >= neibour_apple.z\
+             && (apple.r + neibour_apple.r) * (apple.r + neibour_apple.r) >= distance) {
                 neibour_apple.is_flying = true;
                 count_of_flying_apples++;
                 q.push(i);
