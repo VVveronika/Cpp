@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <queue>
+#include <deque>
 #include <climits>
 #include <cmath>
 using namespace std;
@@ -19,22 +19,27 @@ struct Vertex {
 
 
 void bfs(int start, vector<Vertex>& adj_list) {
-    queue<int> q;
-    q.push(start);
+    deque<int> q;
+    q.push_front(start);
 
     while (!q.empty()) {
         int cur_vertex_index = q.front();
         Vertex& cur_vertex = adj_list[cur_vertex_index];
 
-        q.pop();
+        q.pop_front();
         cur_vertex.in_queue = false;
 
         for (Neighbour i : cur_vertex.neighbours) {
             Vertex& neighbour_vertex = adj_list[i.neighbour_index];
-            if (cur_vertex.best_way + i.weight < neighbour_vertex.best_way) {
-                neighbour_vertex.best_way = cur_vertex.best_way + i.weight;
+            int cur_weight = i.weight;
+            if (cur_vertex.best_way + cur_weight < neighbour_vertex.best_way) {
+                neighbour_vertex.best_way = cur_vertex.best_way + cur_weight;
                 if (!neighbour_vertex.in_queue) {
-                    q.push(i.neighbour_index);
+                    if (cur_weight == 2) {
+                        q.push_back(i.neighbour_index);
+                    } else {
+                        q.push_front(i.neighbour_index);
+                    }
                     neighbour_vertex.in_queue = true;
                 }
             }
