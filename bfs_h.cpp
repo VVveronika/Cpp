@@ -1,49 +1,55 @@
 #include <iostream>
 #include <vector>
-#include <deque>
+#include <queue>
 #include <climits>
 #include <cmath>
 using namespace std;
 
 
 struct Neighbour {
-    int neighbour_index, weight;
+    int index, weight;
 };
 
 
 struct Vertex {
     long long best_way = INT_MAX;
-    bool in_queue = false;
+    bool is_used = false;
     vector<Neighbour> neighbours;
 };
 
 
 void bfs(int start, vector<Vertex>& adj_list) {
-    deque<int> q;
-    q.push_front(start);
+    vector<queue<int>> q(3);
+    q[0].push(start);
 
-    while (!q.empty()) {
-        int cur_vertex_index = q.front();
-        Vertex& cur_vertex = adj_list[cur_vertex_index];
+    int count_of_element_in_q = 1;
+    int cur_distance = 0;
 
-        q.pop_front();
-        cur_vertex.in_queue = false;
+    while (count_of_element_in_q != 0) {
+        int index_of_cur_que = cur_distance % 3;
+        queue<int>& cur_queue = q[index_of_cur_que];
 
-        for (Neighbour i : cur_vertex.neighbours) {
-            Vertex& neighbour_vertex = adj_list[i.neighbour_index];
-            int cur_weight = i.weight;
-            if (cur_vertex.best_way + cur_weight < neighbour_vertex.best_way) {
-                neighbour_vertex.best_way = cur_vertex.best_way + cur_weight;
-                if (!neighbour_vertex.in_queue) {
-                    if (cur_weight == 2) {
-                        q.push_back(i.neighbour_index);
-                    } else {
-                        q.push_front(i.neighbour_index);
-                    }
-                    neighbour_vertex.in_queue = true;
+        while (!cur_queue.empty()) {
+            int cur_index = cur_queue.front();
+            cur_queue.pop();
+            count_of_element_in_q--;
+            if (adj_list[cur_index].is_used) {
+                continue;
+            }
+            adj_list[cur_index].is_used = true;
+
+            for (Neighbour& neighbour : adj_list[cur_index].neighbours) {
+                int new_distance = cur_distance + neighbour.weight;
+                int neighbour_index = neighbour.index;
+                if (new_distance > adj_list[neighbour_index].best_way) {
+                    continue;
                 }
+                adj_list[neighbour_index].best_way = new_distance;
+                q[new_distance % 3].push(neighbour_index);
+                count_of_element_in_q++;
             }
         }
+        cur_distance++;
     }
 }
 
