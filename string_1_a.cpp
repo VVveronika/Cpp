@@ -18,6 +18,8 @@ int main() {
 
     int j = 0;
 
+    cout << n << ' ';
+
     for (int i = 1; i < n; i++) {
         int delta = i - j;
         int& nf = n_function[i];
@@ -32,13 +34,15 @@ int main() {
                 j = i;
             }
         }
+        cout << nf << ' ';
     }
 
-    n_function[0] = n;
+    // n_function[0] = n;
 
-    for (int i : n_function) {
-        cout << i << ' ';
-    }
+
+    // for (int i : n_function) {
+    //     cout << i << ' ';
+    // }
 
     return 0;
 }
