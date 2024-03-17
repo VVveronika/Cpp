@@ -20,25 +20,30 @@ int main() {
 
     cout << n << ' ';
 
-    for (int i = 1; i < n; i++) {
-        int delta = i - j;
-        int& nf = n_function[i];
+    int L = 0;
+    int R = 0;
 
-        if (n_function[delta] + delta < n_function[j]) {
-            nf = n_function[i - j];
-        } else {
-            while (i + nf < n && s[i + nf] == s[nf]) {
-                nf++;
-            }
-            if (i + nf > j + n_function[j]) {
-                j = i;
-            }
+    for (int i = 1; i < n; i++) {
+        int& nf = n_function[i];
+        nf = max(0, min(n_function[i - L], R - i));
+
+        // int delta = i - j;
+
+        // if (n_function[delta] + delta < n_function[j]) {
+        //     nf = n_function[i - j];
+        // } else {
+        while (s[i + nf] == s[nf]) {
+            nf++;
         }
+        if (i + nf > R) {
+            L = i;
+            R = i + nf;
+        }
+        // }
         cout << nf << ' ';
     }
 
     // n_function[0] = n;
-
 
     // for (int i : n_function) {
     //     cout << i << ' ';
