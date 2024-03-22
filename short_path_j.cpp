@@ -15,11 +15,11 @@ struct Vertex {
     // bool in_queue = false;
     int index;
     int turn = 0;
-    vector<Neighbour> neighbours;
+    // vector<Neighbour> neighbours;
 };
 
 
-int bfs(int start_town_index, int end_town_index, int max_turn, vector<Vertex>& towns) {
+int bfs(int start_town_index, int end_town_index, int max_turn, vector<Vertex>& towns, vector<vector<Neighbour>>& neighbours) {
     queue<Vertex> q;
     // q.push(-1);
     Vertex& town = towns[start_town_index];
@@ -44,7 +44,7 @@ int bfs(int start_town_index, int end_town_index, int max_turn, vector<Vertex>& 
         }
         // town = towns[town_index];
         // town.in_queue = false;
-        for (auto [neighbour_index, price] : town.neighbours) {
+        for (auto [neighbour_index, price] : neighbours[town.index]) {
             Vertex neighbour = towns[neighbour_index];
             if (town.best_way + price < neighbour.best_way) {
                 neighbour.best_way = town.best_way + price;
@@ -64,7 +64,7 @@ int main() {
     int n, m, k, from_town_index, to_town_index;
     cin >> n >> m >> k >> from_town_index >> to_town_index;
     vector<Vertex> towns(n + 1);
-
+    vector<vector<Neighbour>> neighbours(n + 1, vector<Neighbour> ());
     for (int i = 1; i <= m; i++) {
         int from_vertex, to_vertex, price;
         cin >> from_vertex >> to_vertex>> price;
@@ -75,12 +75,13 @@ int main() {
         Neighbour neighbour;
         neighbour.to_vertex = to_vertex;
         neighbour.price = price;
-        towns[from_vertex].neighbours.push_back(neighbour);
+        neighbours[from_vertex].push_back(neighbour);
+        // towns[from_vertex].neighbours.push_back(neighbour);
         towns[from_vertex].index = from_vertex;
         towns[to_vertex].index = to_vertex;
     }
 
-    int answer = bfs(from_town_index, to_town_index, k, towns);
+    int answer = bfs(from_town_index, to_town_index, k, towns, neighbours);
 
     answer = answer == INT_MAX ? -1 : answer;
     // if (towns[to_town_index].turn <= k) {
