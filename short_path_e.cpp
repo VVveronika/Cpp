@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <climits>
 
 using namespace std;
 
@@ -11,7 +12,8 @@ void floid(int n, vector<vector<int>>& graph) {
                 int before_station = graph[from][station];
                 int after_station = graph[station][to];
                 int distance_from_to = graph[from][to];
-                bool can_do_better = before_station + after_station < distance_from_to || distance_from_to == 0;
+                bool can_do_better = before_station < INT_MAX && after_station < INT_MAX\
+                && before_station + after_station < distance_from_to;
                 if ((before_station != 0 && after_station != 0) && can_do_better) {
                     graph[from][to] = before_station + after_station;
                 }
@@ -28,7 +30,12 @@ int main() {
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            cin >> graph[i][j];;
+            int weight;
+            cin >> weight;
+            if (weight == 0 && i != j) {
+                weight = INT_MAX;
+            }
+            graph[i][j] = weight;
         }
     }
 
@@ -43,7 +50,7 @@ int main() {
         for (int j = 0; j < n; j++) {
             if (first_graph[i][j] != graph[i][j]) {
                 answer = 2;
-            } else if (graph[i][j] == 0) {
+            } else if (graph[i][j] == INT_MAX) {
                 answer = 0;
             } else {
                 answer = 1;
