@@ -1,44 +1,94 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <climits>
-
 using namespace std;
 
-struct Edge {
-    int from_vertex, to_vertex, weight;
+struct Neighbour {
+    int to_vertex;
+    int price = 0;
 };
 
 
-void bellman(int start_vertex, int max_turn, vector<Edge>& edges, vector<int>& distances) {
-    int n = distances.size();
-    for (int i = 0; i < max_turn; i++) {
-        for (auto edge : edges) {
-            int from_distance = distances[edge.from_vertex];
-            int new_distance = from_distance + edge.weight;
-            if (new_distance < distances[edge.to_vertex] && from_distance < INT_MAX) {
-                distances[edge.to_vertex] = new_distance;
+struct Vertex {
+    long long best_way = INT_MAX;
+    int index;
+};
+
+
+int bfs(int start_town_index, int end_town_index, int max_turn, vector<Vertex>& towns, vector<vector<Neighbour>>& neighbours) {
+    queue<pair<int, int>> q;
+
+    q.push(make_pair(0, start_town_index));
+
+    pair<int, int> separator = make_pair(-1, -1);
+    q.push(separator);
+
+    int answer = INT_MAX;
+    int current_turn = 0;
+
+    while (!q.empty() && current_turn <= max_turn) {
+        pair<int, int> town_pair = q.front();
+        q.pop();
+
+        int town_best_way = town_pair.first;
+        if (town_best_way == -1) {
+            current_turn++;
+            q.push(separator);
+            continue;
+        }
+
+        int town_index = town_pair.second;
+        Vertex& town = towns[town_index];
+        // if (town.best_way < town_best_way) {
+        //     continue;
+        // }
+
+        if (town_index == end_town_index && town_best_way < answer) {
+            answer = town_best_way;
+        }
+
+        for (auto [neighbour_index, price] : neighbours[town_index]) {
+            int new_best_way = town_best_way + price;
+            Vertex& neighbour = towns[neighbour_index];
+            if (new_best_way < neighbour.best_way) {
+                neighbour.best_way = new_best_way;
+                q.push(make_pair(new_best_way, neighbour.index));
             }
         }
     }
+    return answer;
 }
 
 
 int main() {
     int n, m, k, from_town_index, to_town_index;
     cin >> n >> m >> k >> from_town_index >> to_town_index;
-
-    vector<Edge> edges(m + 1);
+    vector<Vertex> towns(n + 1);
+    vector<vector<Neighbour>> neighbours(n + 1, vector<Neighbour> ());
     for (int i = 1; i <= m; i++) {
-        cin >> edges[i].from_vertex >> edges[i].to_vertex >> edges[i].weight;
+        int from_vertex, to_vertex, price;
+        cin >> from_vertex >> to_vertex>> price;
+
+        Neighbour neighbour;
+        neighbour.to_vertex = to_vertex;
+        neighbour.price = price;
+        neighbours[from_vertex].push_back(neighbour);
+        towns[from_vertex].index = from_vertex;
+        towns[to_vertex].index = to_vertex;
     }
 
-    vector<int> distances(n + 1, INT_MAX);
-    distances[from_town_index] = 0;
+    int answer = bfs(from_town_index, to_town_index, k, towns, neighbours);
 
-    bellman(from_town_index, k, edges, distances);
-
-    int answer = distances[to_town_index];
-    cout << (answer == INT_MAX ? -1 : answer) << " ";
-
+    answer = answer == INT_MAX ? -1 : answer;
+    cout << answer;
     return 0;
 }
+/*
+4 5 2 1 4
+1 2 1
+2 3 1
+3 4 1
+1 3 3
+1 4 5
+*/
